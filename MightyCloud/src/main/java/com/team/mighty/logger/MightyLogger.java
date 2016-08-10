@@ -1,10 +1,3 @@
-/**
- * 2014 DBS Bank Ltd. All rights reserved. 
- * This source code is owned by DBS Bank Ltd. 
- * Prior written permission is to be obtained from DBS Bank Ltd for use of this material. 
- * You must not use, copy, adapt, edit, change, transform, publish, distribute, 
- * or show in public this material (in any form or media) without prior written permission from DBS Bank Ltd.   
- */
 package com.team.mighty.logger;
 
 import org.apache.log4j.ConsoleAppender;

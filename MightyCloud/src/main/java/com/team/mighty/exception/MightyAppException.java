@@ -27,4 +27,26 @@ public class MightyAppException extends RuntimeException {
 	public MightyAppException(HttpStatus httpStatus) {
 		this.httpStatus = httpStatus;
 	}
+	
+	public MightyAppException(String errorMessage) {
+		super(errorMessage);
+	}
+	
+	public MightyAppException(String errorMessage, Throwable throwable) {
+		super(errorMessage, throwable);
+	}
+	
+	public MightyAppException(Throwable throwable) {
+		super(throwable);
+	}
+	
+	public MightyAppException(String errorMessage, HttpStatus httpStatus, Throwable throwable) {
+		super(errorMessage, throwable);
+		this.httpStatus = httpStatus;
+	}
+	
+	public MightyAppException(String errorMessage, HttpStatus httpStatus) {
+		super(errorMessage);
+		this.httpStatus = httpStatus;
+	}
 }
