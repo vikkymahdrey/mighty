@@ -36,6 +36,7 @@ public class SpotifyAccessController {
 			spotifyAccessService.getAccessToken(code, error, state);
 			responseEntity = new ResponseEntity<String>(HttpStatus.OK);
 		} catch(MightyAppException e) {
+			logger.error(e);
 			responseEntity = new ResponseEntity<String>(e.getHttpStatus());
 		}
 		
