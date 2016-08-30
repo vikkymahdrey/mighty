@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.team.mighty.constant.MightyAppConstants;
+import com.team.mighty.domain.MightyDeviceInfo;
 import com.team.mighty.exception.MightyAppException;
 import com.team.mighty.logger.MightyLogger;
 
@@ -29,8 +30,8 @@ public class ConsumerInstrumentController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> doRegistration(@RequestBody String payload) {
-		logger.info(" /POST Consumer API", payload);
+	public ResponseEntity<String> doRegistration(@RequestBody MightyDeviceInfo mightDeviceInfo) {
+		logger.info(" /POST Consumer API",  mightDeviceInfo);
 		ResponseEntity<String> responseEntity = null;
 		try {
 			responseEntity = new ResponseEntity<String>(HttpStatus.OK);
