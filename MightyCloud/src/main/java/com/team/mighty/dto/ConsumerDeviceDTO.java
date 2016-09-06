@@ -22,6 +22,8 @@ public class ConsumerDeviceDTO implements Serializable {
 	private String deviceOs;
 	
 	private String deviceOsVersion;
+	
+	private String mightyDeviceId;
 
 	public String getUserName() {
 		return userName;
@@ -77,6 +79,14 @@ public class ConsumerDeviceDTO implements Serializable {
 
 	public void setDeviceOsVersion(String deviceOsVersion) {
 		this.deviceOsVersion = deviceOsVersion;
+	}
+
+	public String getMightyDeviceId() {
+		return mightyDeviceId;
+	}
+
+	public void setMightyDeviceId(String mightyDeviceId) {
+		this.mightyDeviceId = mightyDeviceId;
 	}
 	
 }

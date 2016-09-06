@@ -36,7 +36,7 @@ public class ConsumerInstrumentController {
 		logger.info(" /POST Consumer API",  consumerDeviceDto);
 		ResponseEntity<String> responseEntity = null;
 		try {
-			consumerInstrumentServiceImpl.deRegisterDevice(consumerDeviceDto);
+			consumerInstrumentServiceImpl.registerDevice(consumerDeviceDto);
 			responseEntity = new ResponseEntity<String>(HttpStatus.OK);
 		} catch(MightyAppException e) {
 			responseEntity = new ResponseEntity<String>(e.getHttpStatus());

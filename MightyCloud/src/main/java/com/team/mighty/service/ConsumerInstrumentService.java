@@ -14,7 +14,7 @@ public interface ConsumerInstrumentService {
 	
 	public boolean userLogin();
 	
-	public void registerDevice(ConsumerDeviceDTO consumerDeviceDto);
+	public void registerDevice(ConsumerDeviceDTO consumerDeviceDto) throws MightyAppException;
 	
 	public void deRegisterDevice(ConsumerDeviceDTO consumerDeviceDto);
 	
