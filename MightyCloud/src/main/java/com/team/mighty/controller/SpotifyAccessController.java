@@ -18,7 +18,8 @@ import com.team.mighty.service.SpotifyAccessService;
  * @author Shankara
  *
  */
-@RestController(MightyAppConstants.SPOTIFY_API)
+@RestController
+@RequestMapping(MightyAppConstants.SPOTIFY_API)
 public class SpotifyAccessController {
 	
 	@Autowired

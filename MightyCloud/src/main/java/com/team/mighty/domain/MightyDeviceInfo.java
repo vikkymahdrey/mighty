@@ -31,6 +31,12 @@ public class MightyDeviceInfo extends BaseEntityInfo implements Serializable {
 	
 	@Column(name = "DEVICE_TYPE")
 	private String deviceType;
+	
+	@Column(name ="IS_REGISTERED")
+	private String isRegistered;
+	
+	@Column(name = "IS_ACTIVE")
+	private String isActive;
 
 	public long getId() {
 		return id;
@@ -62,5 +68,21 @@ public class MightyDeviceInfo extends BaseEntityInfo implements Serializable {
 
 	public void setDeviceType(String deviceType) {
 		this.deviceType = deviceType;
+	}
+
+	public String getIsRegistered() {
+		return isRegistered;
+	}
+
+	public void setIsRegistered(String isRegistered) {
+		this.isRegistered = isRegistered;
+	}
+
+	public String getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(String isActive) {
+		this.isActive = isActive;
 	}
 }
