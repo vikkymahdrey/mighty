@@ -68,7 +68,7 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 		
 		String isRegistered = mightyDeviceInfo.getIsRegistered();
 		
-		if(null == isRegistered || !isRegistered.equalsIgnoreCase("Y")) {
+		if(null != isRegistered && isRegistered.equalsIgnoreCase("Y")) {
 			throw new MightyAppException(" Deivce already registered ", HttpStatus.CONFLICT);
 		}
 	}
