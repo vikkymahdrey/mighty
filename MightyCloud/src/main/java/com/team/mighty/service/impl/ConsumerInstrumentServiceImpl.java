@@ -42,7 +42,7 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	}
 
 	@Transactional
-	private void registerUserAndDevice(MightyUserInfo mightyUserInfo, MightyDeviceInfo mightyDeviceInfo) {
+	private void registerUserAndDevice(MightyUserInfo mightyUserInfo, MightyDeviceInfo mightyDeviceInfo) throws MightyAppException {
 		MightyDeviceUserMapping mightyDeviceUserMapping = new MightyDeviceUserMapping();
 		mightyDeviceUserMapping.setMightyDeviceId(mightyDeviceInfo.getId());
 		
@@ -51,7 +51,12 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 		
 		mightyUserInfo.setMightyDeviceUserMapping(setDeviceMapping);
 		
-		consumerInstrumentDAO.save(mightyUserInfo);
+		try {
+			consumerInstrumentDAO.save(mightyUserInfo);
+		} catch(Exception e) {
+			throw new MightyAppException("Unable to save User Device Mapping", HttpStatus.INTERNAL_SERVER_ERROR, e);
+		}
+		
 	}
 	
 	private MightyDeviceInfo getDeviceDetails(String deviceId) {
