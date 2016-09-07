@@ -1,10 +1,13 @@
 package com.team.mighty.domain;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -43,6 +46,9 @@ public class MightyUserInfo extends BaseEntityInfo {
 
 	@Column(name = "DESCRIPTION")
 	private String description;
+	
+	@OneToMany
+	private Set<MightyDeviceUserMapping> mightyDeviceUserMapping;
 
 	public long getId() {
 		return id;
@@ -114,6 +120,14 @@ public class MightyUserInfo extends BaseEntityInfo {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Set<MightyDeviceUserMapping> getMightyDeviceUserMapping() {
+		return mightyDeviceUserMapping;
+	}
+
+	public void setMightyDeviceUserMapping(Set<MightyDeviceUserMapping> mightyDeviceUserMapping) {
+		this.mightyDeviceUserMapping = mightyDeviceUserMapping;
 	}
 
 }

@@ -33,6 +33,9 @@ public class MightyDeviceUserMapping extends BaseEntityInfo implements Serializa
 	
 	@Column(name = "PHONE_DEVICE_OS_VERSION")
 	private String phoneDeviceOSVersion;
+	
+	@Column(name = "MIGHTY_DEVICE_ID")
+	private long mightyDeviceId;
 
 	public long getId() {
 		return id;
@@ -72,6 +75,14 @@ public class MightyDeviceUserMapping extends BaseEntityInfo implements Serializa
 
 	public void setPhoneDeviceOSVersion(String phoneDeviceOSVersion) {
 		this.phoneDeviceOSVersion = phoneDeviceOSVersion;
+	}
+
+	public long getMightyDeviceId() {
+		return mightyDeviceId;
+	}
+
+	public void setMightyDeviceId(long mightyDeviceId) {
+		this.mightyDeviceId = mightyDeviceId;
 	}
 	
 }

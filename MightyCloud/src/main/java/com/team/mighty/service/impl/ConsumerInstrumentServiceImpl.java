@@ -1,13 +1,20 @@
 package com.team.mighty.service.impl;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.team.mighty.constant.MightyAppConstants;
+import com.team.mighty.dao.ConsumerInstrumentDAO;
 import com.team.mighty.dao.MightyDeviceInfoDAO;
 import com.team.mighty.domain.MightyDeviceInfo;
+import com.team.mighty.domain.MightyDeviceUserMapping;
+import com.team.mighty.domain.MightyUserInfo;
 import com.team.mighty.dto.ConsumerDeviceDTO;
 import com.team.mighty.exception.MightyAppException;
 import com.team.mighty.logger.MightyLogger;
@@ -26,11 +33,31 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	@Autowired
 	private MightyDeviceInfoDAO mightyDeviceInfoDAO;
 	
+	@Autowired
+	private ConsumerInstrumentDAO consumerInstrumentDAO;
+	
 	public boolean userLogin() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	@Transactional
+	private void registerUserAndDevice(MightyUserInfo mightyUserInfo, MightyDeviceInfo mightyDeviceInfo) {
+		MightyDeviceUserMapping mightyDeviceUserMapping = new MightyDeviceUserMapping();
+		mightyDeviceUserMapping.setMightyDeviceId(mightyDeviceInfo.getId());
+		
+		Set<MightyDeviceUserMapping> setDeviceMapping = new HashSet<MightyDeviceUserMapping>();
+		setDeviceMapping.add(mightyDeviceUserMapping);
+		
+		mightyUserInfo.setMightyDeviceUserMapping(setDeviceMapping);
+		
+		consumerInstrumentDAO.save(mightyUserInfo);
+	}
+	
+	private MightyDeviceInfo getDeviceDetails(String deviceId) {
+		return mightyDeviceInfoDAO.getDeviceInfo(deviceId);
+	}
+	
 	public void registerDevice(ConsumerDeviceDTO consumerDeviceDto) throws MightyAppException {
 		if(null == consumerDeviceDto) {
 			logger.debug("Register Device, Consumer Device DTO object is null");
@@ -46,6 +73,15 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 		}
 		
 		validateDevice(consumerDeviceDto.getMightyDeviceId());
+		
+		MightyDeviceInfo mightDeviceInfo = getDeviceDetails(consumerDeviceDto.getDeviceId());
+		
+		MightyUserInfo mightyUserInfo = new MightyUserInfo();
+		mightyUserInfo.setUserName(consumerDeviceDto.getUserName());
+		mightyUserInfo.setUserStatus(MightyAppConstants.IND_A);
+		
+		registerUserAndDevice(mightyUserInfo, mightDeviceInfo);
+		
 	}
 
 	public void deRegisterDevice(ConsumerDeviceDTO consumerDeviceDto) {
@@ -94,13 +130,13 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 		
 		String isActive = mightyDeviceInfo.getIsActive();
 		
-		if(null == isActive || isActive.equalsIgnoreCase("N")) {
+		if(null == isActive || isActive.equalsIgnoreCase(MightyAppConstants.IND_N)) {
 			throw new MightyAppException(" Device is not active or status is empty", HttpStatus.GONE);
 		}
 		
 		String isRegistered = mightyDeviceInfo.getIsRegistered();
 		
-		if(null != isRegistered && isRegistered.equalsIgnoreCase("Y")) {
+		if(null != isRegistered && isRegistered.equalsIgnoreCase(MightyAppConstants.IND_Y)) {
 			throw new MightyAppException(" Deivce already registered ", HttpStatus.CONFLICT);
 		}
 	}

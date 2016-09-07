@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.team.mighty.domain.ConsumerInstrument;
+import com.team.mighty.domain.MightyUserInfo;
 
 /**
  * 
@@ -13,6 +13,6 @@ import com.team.mighty.domain.ConsumerInstrument;
  *
  */
 @Repository
-public interface ConsumerInstrumentDAO extends JpaRepository<ConsumerInstrument, Serializable>{
+public interface ConsumerInstrumentDAO extends JpaRepository<MightyUserInfo, Serializable>{
 
 }
