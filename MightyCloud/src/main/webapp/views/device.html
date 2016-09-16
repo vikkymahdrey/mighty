@@ -1,9 +1,17 @@
-<div class="container">
+<div class="container" ng-controller="deviceController">
 
 	<div class="navbar">
 		<ul class="nav navbar-nav">
 			<li ng-class="navClass('deviceList')"><a href='#/device'>Device List</a></li>
 			<li ng-class="navClass('userList')"><a href='#/user'>User List</a></li>
 		</ul>
+	</div>
+	
+		
+	
+		<div ng-init="listAllDevice()">
+		
+		</div>
+	
 	</div>
 </div>

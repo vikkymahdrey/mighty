@@ -7,10 +7,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "TBL_MIGHTY_DEVICE_INFO")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MightyDeviceInfo extends BaseEntityInfo implements Serializable {
 
 	/**
@@ -37,6 +42,10 @@ public class MightyDeviceInfo extends BaseEntityInfo implements Serializable {
 	
 	@Column(name = "IS_ACTIVE")
 	private String isActive;
+	
+	@OneToOne (mappedBy = "mightyDeviceInfo")
+	@JoinColumn(name = "USER_ID")
+	private MightyUserInfo mightyUserInfo;
 
 	public long getId() {
 		return id;
@@ -84,5 +93,13 @@ public class MightyDeviceInfo extends BaseEntityInfo implements Serializable {
 
 	public void setIsActive(String isActive) {
 		this.isActive = isActive;
+	}
+
+	public MightyUserInfo getMightyUserInfo() {
+		return mightyUserInfo;
+	}
+
+	public void setMightyUserInfo(MightyUserInfo mightyUserInfo) {
+		this.mightyUserInfo = mightyUserInfo;
 	}
 }

@@ -14,6 +14,8 @@ public class DeviceInfoDTO implements Serializable {
 	private String isActive;
 	
 	private String isRegistered;
+	
+	private String userName;
 
 	public String getDeviceId() {
 		return deviceId;
@@ -37,5 +39,13 @@ public class DeviceInfoDTO implements Serializable {
 
 	public void setIsRegistered(String isRegistered) {
 		this.isRegistered = isRegistered;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 }

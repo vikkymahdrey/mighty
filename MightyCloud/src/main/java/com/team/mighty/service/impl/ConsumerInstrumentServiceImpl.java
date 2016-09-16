@@ -36,6 +36,7 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	@Autowired
 	private ConsumerInstrumentDAO consumerInstrumentDAO;
 	
+
 	public boolean userLogin() {
 		// TODO Auto-generated method stub
 		return false;
@@ -43,20 +44,29 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 
 	@Transactional
 	private void registerUserAndDevice(MightyUserInfo mightyUserInfo, MightyDeviceInfo mightyDeviceInfo) throws MightyAppException {
+		
 		MightyDeviceUserMapping mightyDeviceUserMapping = new MightyDeviceUserMapping();
 		mightyDeviceUserMapping.setMightyDeviceId(mightyDeviceInfo.getId());
+		mightyDeviceUserMapping.setMightyUserInfo(mightyUserInfo);
 		
-		Set<MightyDeviceUserMapping> setDeviceMapping = new HashSet<MightyDeviceUserMapping>();
-		setDeviceMapping.add(mightyDeviceUserMapping);
+		Set<MightyDeviceUserMapping> setMightyUserDevice = mightyUserInfo.getMightyDeviceUserMapping();
+		if(setMightyUserDevice == null || mightyUserInfo.getMightyDeviceUserMapping().isEmpty()) {
+			setMightyUserDevice = new HashSet<MightyDeviceUserMapping>();
+		}
+		setMightyUserDevice.add(mightyDeviceUserMapping);
+		mightyUserInfo.setMightyDeviceUserMapping(setMightyUserDevice);
 		
-		mightyUserInfo.setMightyDeviceUserMapping(setDeviceMapping);
+		mightyUserInfo.setMightyDeviceInfo(mightyDeviceInfo);
+		
+		mightyDeviceInfo.setIsRegistered(MightyAppConstants.IND_Y);
+		mightyDeviceInfo.setMightyUserInfo(mightyUserInfo);
 		
 		try {
 			consumerInstrumentDAO.save(mightyUserInfo);
 		} catch(Exception e) {
+			logger.error(e.getMessage());
 			throw new MightyAppException("Unable to save User Device Mapping", HttpStatus.INTERNAL_SERVER_ERROR, e);
 		}
-		
 	}
 	
 	private MightyDeviceInfo getDeviceDetails(String deviceId) {
@@ -79,7 +89,7 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 		
 		validateDevice(consumerDeviceDto.getMightyDeviceId());
 		
-		MightyDeviceInfo mightDeviceInfo = getDeviceDetails(consumerDeviceDto.getDeviceId());
+		MightyDeviceInfo mightDeviceInfo = getDeviceDetails(consumerDeviceDto.getMightyDeviceId());
 		
 		MightyUserInfo mightyUserInfo = new MightyUserInfo();
 		mightyUserInfo.setUserName(consumerDeviceDto.getUserName());

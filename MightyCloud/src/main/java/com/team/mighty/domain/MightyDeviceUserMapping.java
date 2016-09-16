@@ -2,11 +2,14 @@ package com.team.mighty.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -21,6 +24,10 @@ public class MightyDeviceUserMapping extends BaseEntityInfo implements Serializa
 	@Id
 	@GeneratedValue( strategy = GenerationType.IDENTITY)
 	private long id;
+	
+	@ManyToOne
+	@JoinColumn(name = "USER_ID")
+	private MightyUserInfo mightyUserInfo;
 	
 	@Column(name = "PHONE_DEVICE_ID")
 	private String phoneDeviceId;
@@ -83,6 +90,14 @@ public class MightyDeviceUserMapping extends BaseEntityInfo implements Serializa
 
 	public void setMightyDeviceId(long mightyDeviceId) {
 		this.mightyDeviceId = mightyDeviceId;
+	}
+
+	public MightyUserInfo getMightyUserInfo() {
+		return mightyUserInfo;
+	}
+
+	public void setMightyUserInfo(MightyUserInfo mightyUserInfo) {
+		this.mightyUserInfo = mightyUserInfo;
 	}
 	
 }

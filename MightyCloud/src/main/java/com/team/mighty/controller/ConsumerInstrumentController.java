@@ -40,6 +40,7 @@ public class ConsumerInstrumentController {
 			responseEntity = new ResponseEntity<String>(HttpStatus.OK);
 		} catch(MightyAppException e) {
 			responseEntity = new ResponseEntity<String>(e.getHttpStatus());
+			logger.error(e);
 		}
 		return responseEntity;
 	}
