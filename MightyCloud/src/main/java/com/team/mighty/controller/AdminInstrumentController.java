@@ -8,7 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.team.mighty.constant.MightyAppConstants;
 import com.team.mighty.dto.DeviceInfoDTO;
@@ -39,5 +41,10 @@ public class AdminInstrumentController {
 			responseEntity = new ResponseEntity<String>(e.getMessage(), e.getHttpStatus());
 		}
 		return responseEntity;
+	}
+	
+	@RequestMapping(value = "/device/upload", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> uploadDeviceListCSV(@RequestParam("file") MultipartFile file) {
+		return null;
 	}
 }

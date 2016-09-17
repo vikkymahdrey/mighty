@@ -2,16 +2,80 @@
 
 	<div class="navbar">
 		<ul class="nav navbar-nav">
-			<li ng-class="navClass('deviceList')"><a href='#/device'>Device List</a></li>
-			<li ng-class="navClass('userList')"><a href='#/user'>User List</a></li>
+			<li ng-class="navClass('deviceList')"><a href='#/device'>Device
+					List</a></li>
+			<li ng-class="navClass('userList')"><a href='#/user'>User
+					List</a></li>
 		</ul>
 	</div>
-	
-		
-	
-		<div ng-init="listAllDevice()">
-		
-		</div>
-	
+
+
+	<div style="
+    padding-left: 50px;
+    padding-bottom: 50px;"">
+		<h2>Upload New Device List (CSV)</h2>
+		<br>
+		<table>
+		<tr></tr>
+			<tr>
+				<td><input type="file" file-model="myFile" /></td>
+				<td>
+					<button ng-click="uploadFile()">Upload</button>
+				</td>
+			</tr>
+		<tr></tr>
+		</table>
+
+
 	</div>
+
+	<div></div>
+
+	<div class="table-responsive"
+		style="padding-left: 50px; padding-right: 50px;"
+		ng-init="listAllDevice()">
+		<table class="table">
+			<thead>
+
+				<tr>
+					<th class="id" custom-sort order="'id'" sort="sort">Device
+						Id&nbsp;</th>
+					<th class="name" custom-sort order="'name'" sort="sort">Active&nbsp;</th>
+					<th class="description" custom-sort order="'description'"
+						sort="sort">Registered&nbsp;</th>
+				</tr>
+			</thead>
+			<!-- <tfoot>
+				<td colspan="6">
+					<div class="pagination pull-right">
+						<ul>
+							<li ng-class="{disabled: currentPage == 0}"><a href
+								ng-click="prevPage()">« Prev</a></li>
+
+							<li
+								ng-repeat="n in range(pagedItems.length, currentPage, currentPage + gap) "
+								ng-class="{active: n == currentPage}" ng-click="setPage()">
+								<a href ng-bind="n + 1">1</a>
+							</li>
+
+							<li ng-class="{disabled: (currentPage) == pagedItems.length - 1}">
+								<a href ng-click="nextPage()">Next »</a>
+							</li>
+						</ul>
+					</div>
+				</td>
+			</tfoot> -->
+			<tbody>
+				<tr ng-repeat="item in items ">
+					<td>{{item.deviceId}}</td>
+					<td>{{item.isActive}}</td>
+					<td>{{item.isRegistered}}</td>
+					<td><a href ng-click="editDevice(item.deviceId)">Edit</a></td>
+					<td><a href ng-click="deleteDevice(item.deviceId)">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
 </div>
