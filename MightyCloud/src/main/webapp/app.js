@@ -1,4 +1,4 @@
-var mightyApp = angular.module('mighty', ['ngRoute']);
+var mightyApp = angular.module('mighty', ['ngRoute','ui.bootstrap']);
 
 mightyApp.config(function($routeProvider) {
     $routeProvider

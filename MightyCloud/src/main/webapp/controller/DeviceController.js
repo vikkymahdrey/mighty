@@ -1,8 +1,21 @@
 /**
  * 
  */
-mightyApp.controller('deviceController', function( $scope,$location, $http) {
+mightyApp.controller('deviceController', function( $scope,$location, $http,$uibModal) {
 	
+	 $scope.showModal = false;
+	 $scope.toggleModal = function(){
+	    $scope.showModal = !$scope.showModal;
+	 };
+	 
+	 $scope.open = function (size) {
+		    var modalInstance = $uibModal.open({
+		      ariaLabelledBy: 'modal-title',
+		      ariaDescribedBy: 'modal-body',
+		      templateUrl: 'myModalContent.html',
+		      size: size
+		    });
+	    
     // init
     $scope.sort = {       
                 sortingOrder : 'id',
