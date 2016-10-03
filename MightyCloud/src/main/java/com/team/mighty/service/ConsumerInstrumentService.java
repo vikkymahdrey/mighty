@@ -18,6 +18,8 @@ public interface ConsumerInstrumentService {
 	
 	public void deRegisterDevice(ConsumerDeviceDTO consumerDeviceDto);
 	
+	public void deregisterDevice(String deviceId);
+	
 	public void updateReistrationToken();
 	
 	public void retriveDevices();

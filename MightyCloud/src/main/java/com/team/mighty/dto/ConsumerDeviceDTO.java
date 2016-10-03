@@ -11,6 +11,10 @@ public class ConsumerDeviceDTO implements Serializable {
 
 	private String userName;
 	
+	private String firstName;
+	
+	private String lastName;
+	
 	private String deviceId;
 	
 	private String deviceName;
@@ -24,6 +28,8 @@ public class ConsumerDeviceDTO implements Serializable {
 	private String deviceOsVersion;
 	
 	private String mightyDeviceId;
+	
+	private String emailId;
 
 	public String getUserName() {
 		return userName;
@@ -87,6 +93,30 @@ public class ConsumerDeviceDTO implements Serializable {
 
 	public void setMightyDeviceId(String mightyDeviceId) {
 		this.mightyDeviceId = mightyDeviceId;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getEmailId() {
+		return emailId;
+	}
+
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
 	}
 	
 }

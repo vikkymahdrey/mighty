@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.team.mighty.constant.MightyAppConstants;
 import com.team.mighty.dao.ConsumerInstrumentDAO;
 import com.team.mighty.dao.MightyDeviceInfoDAO;
+import com.team.mighty.dao.MightyDeviceUserMapDAO;
 import com.team.mighty.domain.MightyDeviceInfo;
 import com.team.mighty.domain.MightyDeviceUserMapping;
 import com.team.mighty.domain.MightyUserInfo;
@@ -36,6 +37,9 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	@Autowired
 	private ConsumerInstrumentDAO consumerInstrumentDAO;
 	
+	@Autowired
+	private MightyDeviceUserMapDAO mightyDeviceUserMapDAO;
+	
 
 	public boolean userLogin() {
 		// TODO Auto-generated method stub
@@ -43,11 +47,24 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	}
 
 	@Transactional
-	private void registerUserAndDevice(MightyUserInfo mightyUserInfo, MightyDeviceInfo mightyDeviceInfo) throws MightyAppException {
+	private void registerUserAndDevice(ConsumerDeviceDTO consumerDeviceDto, MightyDeviceInfo mightyDeviceInfo) throws MightyAppException {
+		
+		MightyUserInfo mightyUserInfo = new MightyUserInfo();
+		mightyUserInfo.setUserName(consumerDeviceDto.getUserName());
+		mightyUserInfo.setUserStatus(MightyAppConstants.IND_A);
+		mightyUserInfo.setFirstName(consumerDeviceDto.getFirstName());
+		mightyUserInfo.setLastName(consumerDeviceDto.getLastName());
+		mightyUserInfo.setEmailId(consumerDeviceDto.getEmailId());
 		
 		MightyDeviceUserMapping mightyDeviceUserMapping = new MightyDeviceUserMapping();
 		mightyDeviceUserMapping.setMightyDeviceId(mightyDeviceInfo.getId());
 		mightyDeviceUserMapping.setMightyUserInfo(mightyUserInfo);
+		mightyDeviceUserMapping.setPhoneDeviceOSVersion(consumerDeviceDto.getDeviceOs());
+		mightyDeviceUserMapping.setPhoneDeviceType(consumerDeviceDto.getDeviceType());
+		mightyDeviceUserMapping.setPhoneDeviceId(consumerDeviceDto.getDeviceId());
+		mightyDeviceUserMapping.setPhoneDeviceVersion(consumerDeviceDto.getDeviceOsVersion());
+		
+		Set<MightyUserInfo> setUserInfo = new HashSet<MightyUserInfo>();
 		
 		Set<MightyDeviceUserMapping> setMightyUserDevice = mightyUserInfo.getMightyDeviceUserMapping();
 		if(setMightyUserDevice == null || mightyUserInfo.getMightyDeviceUserMapping().isEmpty()) {
@@ -58,8 +75,10 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 		
 		mightyUserInfo.setMightyDeviceInfo(mightyDeviceInfo);
 		
+		setUserInfo.add(mightyUserInfo);
+		
 		mightyDeviceInfo.setIsRegistered(MightyAppConstants.IND_Y);
-		mightyDeviceInfo.setMightyUserInfo(mightyUserInfo);
+		mightyDeviceInfo.setMightyUserInfo(setUserInfo);
 		
 		try {
 			consumerInstrumentDAO.save(mightyUserInfo);
@@ -91,11 +110,9 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 		
 		MightyDeviceInfo mightDeviceInfo = getDeviceDetails(consumerDeviceDto.getMightyDeviceId());
 		
-		MightyUserInfo mightyUserInfo = new MightyUserInfo();
-		mightyUserInfo.setUserName(consumerDeviceDto.getUserName());
-		mightyUserInfo.setUserStatus(MightyAppConstants.IND_A);
+
 		
-		registerUserAndDevice(mightyUserInfo, mightDeviceInfo);
+		registerUserAndDevice(consumerDeviceDto, mightDeviceInfo);
 		
 	}
 
@@ -111,6 +128,52 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 			logger.debug(" De RegisterDevice, Anyone of the object is empty [UserName, DeviceId, MightyDeviceId] ", consumerDeviceDto.getUserName(), 
 					",",consumerDeviceDto.getDeviceId(), ",",consumerDeviceDto.getMightyDeviceId() );
 			throw new MightyAppException("Invalid request Parameters [UserName or Device Id or Mighty Device Id] ", HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+
+	public void deregisterDevice(String deviceId) {
+		if(null == deviceId) {
+			logger.debug("DeRegister Device, Consumer DeviceId is null");
+			throw new MightyAppException("Invalid request Object", HttpStatus.BAD_REQUEST);
+		}
+		
+			
+		MightyDeviceInfo mightDeviceInfo = getDeviceDetails(deviceId);
+		
+		if(mightDeviceInfo == null ) {
+			throw new MightyAppException("Device Details Not Found in System", HttpStatus.NOT_FOUND);
+		}
+		
+		MightyDeviceUserMapping mightyDeviceUserMapping = mightyDeviceUserMapDAO.getDeviceInfo(mightDeviceInfo.getId());
+		
+		if(mightyDeviceUserMapping != null) {
+			logger.debug(mightyDeviceUserMapping);
+			logger.debug(mightyDeviceUserMapping.getMightyUserInfo());
+			logger.debug(mightyDeviceUserMapping.getMightyUserInfo().getId());
+			mightyDeviceUserMapping.setRegistrationStatus(MightyAppConstants.IND_N);
+			updateUserDeviceMap(mightyDeviceUserMapping);
+		}
+		
+		mightDeviceInfo.setIsRegistered(MightyAppConstants.IND_N);
+		
+		updateForDeRegisterDevice(mightDeviceInfo);
+		
+	}
+	
+	private void updateUserDeviceMap(MightyDeviceUserMapping mightyDevUsrMap) {
+		try {
+			mightyDeviceUserMapDAO.save(mightyDevUsrMap);
+		} catch(Exception e) {
+			throw new MightyAppException("Unable to update User Device Mapping", HttpStatus.INTERNAL_SERVER_ERROR, e);
+		}
+	}
+	
+	public void updateForDeRegisterDevice(MightyDeviceInfo mightDeviceInfo) {
+		try {
+			mightyDeviceInfoDAO.save(mightDeviceInfo);
+		} catch(Exception e) {
+			throw new MightyAppException("Unable to update ", HttpStatus.INTERNAL_SERVER_ERROR, e);
 		}
 		
 	}
