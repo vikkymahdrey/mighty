@@ -43,6 +43,9 @@ public class MightyDeviceUserMapping extends BaseEntityInfo implements Serializa
 	
 	@Column(name = "MIGHTY_DEVICE_ID")
 	private long mightyDeviceId;
+	
+	@Column(name = "STATUS")
+	private String registrationStatus;
 
 	public long getId() {
 		return id;
@@ -98,6 +101,14 @@ public class MightyDeviceUserMapping extends BaseEntityInfo implements Serializa
 
 	public void setMightyUserInfo(MightyUserInfo mightyUserInfo) {
 		this.mightyUserInfo = mightyUserInfo;
+	}
+
+	public String getRegistrationStatus() {
+		return registrationStatus;
+	}
+
+	public void setRegistrationStatus(String registrationStatus) {
+		this.registrationStatus = registrationStatus;
 	}
 	
 }

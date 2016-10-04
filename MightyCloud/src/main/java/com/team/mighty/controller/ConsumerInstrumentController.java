@@ -39,7 +39,8 @@ public class ConsumerInstrumentController {
 			consumerInstrumentServiceImpl.registerDevice(consumerDeviceDto);
 			responseEntity = new ResponseEntity<String>(HttpStatus.OK);
 		} catch(MightyAppException e) {
-			responseEntity = new ResponseEntity<String>(e.getHttpStatus());
+			String errorMessage = e.getMessage();
+			responseEntity = new ResponseEntity<String>(errorMessage,e.getHttpStatus());
 			logger.error(e);
 		}
 		return responseEntity;
@@ -53,9 +54,28 @@ public class ConsumerInstrumentController {
 			consumerInstrumentServiceImpl.validateDevice(deviceId);
 			responseEntity = new ResponseEntity<String>(HttpStatus.OK);
 		} catch(MightyAppException e) {
-			responseEntity = new ResponseEntity<String>(e.getHttpStatus());
+			String errorMessage = e.getMessage();
+			responseEntity = new ResponseEntity<String>(errorMessage, e.getHttpStatus());
+			logger.error(e);
+			e.printStackTrace();
 		}
 		
+		return responseEntity;
+	}
+	
+	@RequestMapping(value = "/{deviceId}",method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> doDeRegistration(@PathVariable String deviceId) {
+		logger.info(" /POST Consumer API for MightyDeReg",  deviceId);
+			
+		ResponseEntity<String> responseEntity = null;
+		try {
+			consumerInstrumentServiceImpl.deregisterDevice(deviceId);
+			responseEntity = new ResponseEntity<String>(HttpStatus.OK);
+		} catch(MightyAppException e) {
+			String errorMessage = e.getMessage();
+			responseEntity = new ResponseEntity<String>(errorMessage, e.getHttpStatus());
+			logger.error(e);
+		}
 		return responseEntity;
 	}
 
