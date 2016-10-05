@@ -10,7 +10,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Mighty User View</title>
+<title>Mighty Device View</title>
 <link rel="stylesheet" href="css/displaytag.css" media="all">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/style1.css">
@@ -21,25 +21,27 @@
 </head>
 <body>
 	<%
-	String fname1=("MightyDeviceUser :").concat(new Date().toString()).concat(".csv");
-	String fname2=("MightyDeviceUser :").concat(new Date().toString()).concat(".xls");
-	String fname3=("MightyDeviceUser :").concat(new Date().toString()).concat(".xml");
-	List<MightyUserInfo> mightUserList=(List<MightyUserInfo>)request.getAttribute("mightydeviceuserlist");
-	
+	String fname1=("MightyDevices :").concat(new Date().toString()).concat(".csv");
+	String fname2=("MightyDevices :").concat(new Date().toString()).concat(".xls");
+	String fname3=("MightyDevices :").concat(new Date().toString()).concat(".xml");
+	List<MightyDeviceInfo> mightDeviceList=(List<MightyDeviceInfo>)request.getAttribute("mightyDeviceList");
 	%>
 		<div id="body">
 	<div class="content">
 			<hr />
-			<h2 align="center">Mighty Device User Report</h2>
-		 <display:table class="alternateColor" name="<%=mightUserList%>" id="row"
+			<h2 align="center">Mighty Device Report</h2>
+		 <display:table class="alternateColor" name="<%=mightDeviceList%>" id="row"
 			export="true" requestURI="" defaultsort="1" defaultorder="descending" pagesize="50">
-				<display:column property="userName" title="UserName"
-				sortable="true" headerClass="sortable" />
+				<display:column property="deviceId" title="Device_ID"	sortable="true" headerClass="sortable" />
 				
-				<display:column  property="userStatus" title="User Status" sortable="true" />
-				 				
-				<display:column property="description" title="description"
-				sortable="true" headerClass="sortable" />
+				<display:column  property="deviceName" title="Device_Name" sortable="true" headerClass="sortable"/>
+				
+				<display:column  property="deviceType" title="Device_Type" sortable="true" headerClass="sortable"/>
+				
+				<display:column property="isRegistered" title="Registered_Status" 	sortable="true" headerClass="sortable" />
+				
+				<display:column  property="isActive" title="Device_Status" sortable="true" headerClass="sortable"/>
+				
 			
      		   
 		 	 <display:setProperty name="export.csv.filename" value="<%=fname1%>" />

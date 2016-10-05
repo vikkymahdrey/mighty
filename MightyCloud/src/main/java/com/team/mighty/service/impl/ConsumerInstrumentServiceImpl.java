@@ -232,4 +232,9 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 		return mightyDeviceInfoDAO.getMightyUserInfo();
 	}
 
+	
+	public List<MightyDeviceInfo> getMightyDeviceInfo() throws Exception {
+		return mightyDeviceInfoDAO.getMightyDeviceInfo();
+	}
+
 }

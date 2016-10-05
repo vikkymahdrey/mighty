@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.team.mighty.domain.MightyDeviceInfo;
 import com.team.mighty.domain.MightyUserInfo;
 import com.team.mighty.logger.MightyLogger;
 import com.team.mighty.service.ConsumerInstrumentService;
@@ -25,5 +26,14 @@ private static final MightyLogger logger = MightyLogger.getLogger(MightyUserDevi
 		List<MightyUserInfo> mightUserList=consumerInstrumentServiceImpl.getMightyUserInfo();
 		map.put("mightydeviceuserlist", mightUserList);
 		return "deviceInfo";
+	}
+	
+	@RequestMapping(value = "/mightyDeviceInfo", method = RequestMethod.GET)
+	public String getAllMightyDevicesInfoHandler(Map<String,Object> map) throws Exception {
+		logger.debug("Getting mighty device inform");
+		List<MightyDeviceInfo> mightyDeviceList=consumerInstrumentServiceImpl.getMightyDeviceInfo();
+		logger.debug("Mighty device List"+mightyDeviceList.size());
+		map.put("mightyDeviceList", mightyDeviceList);
+		return "mightyDeviceInfo";
 	}
 }

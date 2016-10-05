@@ -16,4 +16,7 @@ public interface MightyDeviceInfoDAO extends JpaRepository<MightyDeviceInfo, Lon
 	
 	@Query("FROM MightyUserInfo")
 	List<MightyUserInfo> getMightyUserInfo() throws Exception;
+
+	@Query("FROM MightyDeviceInfo")
+	List<MightyDeviceInfo> getMightyDeviceInfo();
 }
