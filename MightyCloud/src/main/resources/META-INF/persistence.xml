@@ -6,14 +6,18 @@
 	<persistence-unit name="mightyPU" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<class>com.team.mighty.domain.ConsumerInstrument</class>
+		<class>com.team.mighty.domain.MightyDeviceInfo</class>
+		<class>com.team.mighty.domain.MightyDeviceUserMapping</class>
+		<class>com.team.mighty.domain.MightyUserAnalytics</class>
+		<class>com.team.mighty.domain.MightyUserInfo</class>
 		<properties>
 			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
-			<property name="hibernate.connection.url" value="jdbc:mysql://127.2.140.130:3306/mighty" />
+			<!-- <property name="hibernate.connection.url" value="jdbc:mysql://127.2.140.130:3306/mighty" />
 			<property name="hibernate.connection.username" value="adminr26Gdqj" />
-			<property name="hibernate.connection.password" value="l-Qh7sDyWMCz"/>
-	<!-- 		<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/mighty" />
+			<property name="hibernate.connection.password" value="l-Qh7sDyWMCz"/> -->
+	 		<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/mighty" />
 			<property name="hibernate.connection.username" value="root" />
-			<property name="hibernate.connection.password" value="toor"/> -->
+			<property name="hibernate.connection.password" value="root"/> 
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="true" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />
