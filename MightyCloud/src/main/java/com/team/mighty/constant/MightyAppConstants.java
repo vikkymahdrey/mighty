@@ -19,5 +19,6 @@ public class MightyAppConstants {
 	public static final String IND_Y = "Y";
 	public static final String IND_N = "N";
 	public static final String IND_A = "A";
+	public static final String IND_D = "D";
 	
 }

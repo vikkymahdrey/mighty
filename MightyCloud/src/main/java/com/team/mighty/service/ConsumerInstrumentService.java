@@ -1,6 +1,7 @@
 package com.team.mighty.service;
 
 import com.team.mighty.dto.ConsumerDeviceDTO;
+import com.team.mighty.dto.UserLoginDTO;
 import com.team.mighty.exception.MightyAppException;
 
 /**
@@ -12,7 +13,7 @@ public interface ConsumerInstrumentService {
 	
 	public void validateDevice(String deviceId) throws MightyAppException; 
 	
-	public boolean userLogin();
+	public UserLoginDTO userLogin(UserLoginDTO userLoginDTO) throws MightyAppException;
 	
 	public void registerDevice(ConsumerDeviceDTO consumerDeviceDto) throws MightyAppException;
 	

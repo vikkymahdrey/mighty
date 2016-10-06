@@ -46,9 +46,6 @@ public class MightyDeviceInfo extends BaseEntityInfo implements Serializable {
 	@Column(name = "IS_ACTIVE")
 	private String isActive;
 	
-	@OneToMany
-	@JoinColumn(name = "USER_ID")
-	private Set<MightyUserInfo> mightyUserInfo;
 
 	public long getId() {
 		return id;
@@ -96,13 +93,5 @@ public class MightyDeviceInfo extends BaseEntityInfo implements Serializable {
 
 	public void setIsActive(String isActive) {
 		this.isActive = isActive;
-	}
-
-	public Set<MightyUserInfo> getMightyUserInfo() {
-		return mightyUserInfo;
-	}
-
-	public void setMightyUserInfo(Set<MightyUserInfo> mightyUserInfo) {
-		this.mightyUserInfo = mightyUserInfo;
 	}
 }

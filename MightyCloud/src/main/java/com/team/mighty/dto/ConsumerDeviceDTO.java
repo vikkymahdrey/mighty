@@ -30,6 +30,8 @@ public class ConsumerDeviceDTO implements Serializable {
 	private String mightyDeviceId;
 	
 	private String emailId;
+	
+	private long userId;
 
 	public String getUserName() {
 		return userName;
@@ -117,6 +119,14 @@ public class ConsumerDeviceDTO implements Serializable {
 
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 	
 }

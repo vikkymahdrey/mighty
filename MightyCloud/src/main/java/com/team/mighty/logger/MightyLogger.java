@@ -5,6 +5,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
+import com.team.mighty.utils.StackTraceUtil;
+
 /**
  * 
  * @author Shankara
@@ -101,5 +103,16 @@ public class MightyLogger {
 			root.removeAllAppenders();
 			root.addAppender(new ConsoleAppender(new PatternLayout("%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p %c %m%n")));
 		}
+	}
+	
+	public void errorException(Throwable t, Object... objs) {
+		StringBuilder buf = new StringBuilder();
+		buf.append(lineNumber ());
+		for (Object obj : objs) {
+			buf.append(obj);
+		}
+		buf.append("\n");
+		buf.append(StackTraceUtil.constructStackTrace(t));
+		logger.error(buf.toString());
 	}
 }

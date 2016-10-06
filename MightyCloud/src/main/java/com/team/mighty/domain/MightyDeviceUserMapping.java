@@ -1,10 +1,11 @@
 package com.team.mighty.domain;
 
 import java.io.Serializable;
+import java.sql.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,7 +26,7 @@ public class MightyDeviceUserMapping extends BaseEntityInfo implements Serializa
 	@GeneratedValue( strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "USER_ID")
 	private MightyUserInfo mightyUserInfo;
 	
@@ -46,6 +47,12 @@ public class MightyDeviceUserMapping extends BaseEntityInfo implements Serializa
 	
 	@Column(name = "STATUS")
 	private String registrationStatus;
+	
+	@Column(name = "CREATED_DT")
+	private Date createdDt;
+	
+	@Column(name = "UPDATED_DT")
+	private Date updatedDt;
 
 	public long getId() {
 		return id;
@@ -109,6 +116,22 @@ public class MightyDeviceUserMapping extends BaseEntityInfo implements Serializa
 
 	public void setRegistrationStatus(String registrationStatus) {
 		this.registrationStatus = registrationStatus;
+	}
+
+	public Date getCreatedDt() {
+		return createdDt;
+	}
+
+	public void setCreatedDt(Date createdDt) {
+		this.createdDt = createdDt;
+	}
+
+	public Date getUpdatedDt() {
+		return updatedDt;
+	}
+
+	public void setUpdatedDt(Date updatedDt) {
+		this.updatedDt = updatedDt;
 	}
 	
 }
