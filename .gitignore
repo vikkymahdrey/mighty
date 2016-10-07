@@ -2,4 +2,5 @@
 .recommenders
 RemoteSystemsTempFiles
 Servers
-MightyCloud/target
+MightyCloud/target/MightyCloud/
+/MightyCloud/

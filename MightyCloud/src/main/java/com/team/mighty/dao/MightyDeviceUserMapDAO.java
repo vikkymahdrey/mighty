@@ -10,6 +10,17 @@ import com.team.mighty.domain.MightyDeviceUserMapping;
 
 public interface MightyDeviceUserMapDAO extends JpaRepository<MightyDeviceUserMapping, Serializable>{
 
-	@Query("SELECT m FROM MightyDeviceUserMapping m WHERE m.mightyDeviceId = :deviceId")
+	@Query("SELECT m FROM MightyDeviceUserMapping m WHERE m.mightyDeviceId = :deviceId and m.registrationStatus='Y' ")
 	MightyDeviceUserMapping getDeviceInfo(@Param("deviceId") long deviceId);
+	
+	@Query("SELECT m FROM MightyDeviceUserMapping m join m.mightyUserInfo userInfo WHERE m.mightyDeviceId = :mightyDeviceId and m.phoneDeviceId = :phoneDeviceId and userInfo.id = :userId")
+	MightyDeviceUserMapping checkAnyDeActivatedAccount(@Param("userId") long userId, @Param("mightyDeviceId") long mightyDeviceId
+			, @Param("phoneDeviceId") String phoneDeviceId);
+	
+	@Query("SELECT m FROM MightyDeviceUserMapping m join m.mightyUserInfo userInfo WHERE m.phoneDeviceId = :phoneDeviceId and userInfo.id = :userId")
+	MightyDeviceUserMapping checkUserAndPhoneDeviceId(@Param("userId") long userId, @Param("phoneDeviceId") String phoneDeviceId);
+	
+	@Query("SELECT m FROM MightyDeviceUserMapping m join m.mightyUserInfo userInfo WHERE m.mightyDeviceId = :mightyDeviceId and m.phoneDeviceId = :phoneDeviceId and userInfo.userName = :userName")
+	MightyDeviceUserMapping checkAnyDeActivatedAccountByUserName(@Param("userName") String userName, @Param("mightyDeviceId") long mightyDeviceId
+			, @Param("phoneDeviceId") String phoneDeviceId);
 }

@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.team.mighty.constant.MightyAppConstants;
 import com.team.mighty.dto.ConsumerDeviceDTO;
+import com.team.mighty.dto.UserLoginDTO;
 import com.team.mighty.exception.MightyAppException;
 import com.team.mighty.logger.MightyLogger;
 import com.team.mighty.service.ConsumerInstrumentService;
+import com.team.mighty.utils.JsonUtil;
 
 /**
  * 
@@ -31,6 +33,24 @@ public class ConsumerInstrumentController {
 	
 	private static final MightyLogger logger = MightyLogger.getLogger(ConsumerInstrumentController.class);
 
+	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> userLoginFromApp(@RequestBody UserLoginDTO userLoginDTO) {
+		logger.info(" /POST User Login API ", userLoginDTO);
+		ResponseEntity<String> responseEntity = null;
+		try {
+			userLoginDTO = consumerInstrumentServiceImpl.userLogin(userLoginDTO);
+			String response = JsonUtil.objToJson(userLoginDTO);
+			responseEntity = new ResponseEntity<String>(response, HttpStatus.OK);
+		} catch(MightyAppException e) {
+			logger.errorException(e, e.getMessage());
+			userLoginDTO.setStatusCode(e.getHttpStatus().toString());
+			userLoginDTO.setStatusDesc(e.getMessage());
+			String response = JsonUtil.objToJson(userLoginDTO);
+			responseEntity = new ResponseEntity<String>(response, e.getHttpStatus());
+		}
+		return responseEntity;
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> doRegistration(@RequestBody ConsumerDeviceDTO consumerDeviceDto) {
 		logger.info(" /POST Consumer API",  consumerDeviceDto);
@@ -41,7 +61,7 @@ public class ConsumerInstrumentController {
 		} catch(MightyAppException e) {
 			String errorMessage = e.getMessage();
 			responseEntity = new ResponseEntity<String>(errorMessage,e.getHttpStatus());
-			logger.error(e);
+			logger.errorException(e, e.getMessage());
 		}
 		return responseEntity;
 	}
@@ -56,8 +76,7 @@ public class ConsumerInstrumentController {
 		} catch(MightyAppException e) {
 			String errorMessage = e.getMessage();
 			responseEntity = new ResponseEntity<String>(errorMessage, e.getHttpStatus());
-			logger.error(e);
-			e.printStackTrace();
+			logger.errorException(e, e.getMessage());
 		}
 		
 		return responseEntity;
@@ -74,7 +93,7 @@ public class ConsumerInstrumentController {
 		} catch(MightyAppException e) {
 			String errorMessage = e.getMessage();
 			responseEntity = new ResponseEntity<String>(errorMessage, e.getHttpStatus());
-			logger.error(e);
+			logger.errorException(e, e.getMessage());
 		}
 		return responseEntity;
 	}

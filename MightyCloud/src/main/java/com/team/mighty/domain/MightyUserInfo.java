@@ -1,15 +1,16 @@
 package com.team.mighty.domain;
 
+import java.sql.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -57,12 +58,15 @@ public class MightyUserInfo extends BaseEntityInfo {
 	@Column(name = "DESCRIPTION")
 	private String description;
 	
-	@OneToMany(mappedBy = "mightyUserInfo", cascade = CascadeType.ALL)
+	@Column(name = "CREATED_DT")
+	private Date createdDt;
+	
+	@Column(name = "UPDATED_DT")
+	private Date updatedDt;
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<MightyDeviceUserMapping> mightyDeviceUserMapping;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	private MightyDeviceInfo mightyDeviceInfo;
-
 	public long getId() {
 		return id;
 	}
@@ -143,12 +147,20 @@ public class MightyUserInfo extends BaseEntityInfo {
 		this.mightyDeviceUserMapping = mightyDeviceUserMapping;
 	}
 
-	public MightyDeviceInfo getMightyDeviceInfo() {
-		return mightyDeviceInfo;
+	public Date getCreatedDt() {
+		return createdDt;
 	}
 
-	public void setMightyDeviceInfo(MightyDeviceInfo mightyDeviceInfo) {
-		this.mightyDeviceInfo = mightyDeviceInfo;
+	public void setCreatedDt(Date createdDt) {
+		this.createdDt = createdDt;
+	}
+
+	public Date getUpdatedDt() {
+		return updatedDt;
+	}
+
+	public void setUpdatedDt(Date updatedDt) {
+		this.updatedDt = updatedDt;
 	}
 
 }
