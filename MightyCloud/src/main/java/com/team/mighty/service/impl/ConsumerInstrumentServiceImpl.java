@@ -1,6 +1,9 @@
 package com.team.mighty.service.impl;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +21,7 @@ import com.team.mighty.domain.MightyDeviceInfo;
 import com.team.mighty.domain.MightyDeviceUserMapping;
 import com.team.mighty.domain.MightyUserInfo;
 import com.team.mighty.dto.ConsumerDeviceDTO;
+import com.team.mighty.dto.UserLoginDTO;
 import com.team.mighty.exception.MightyAppException;
 import com.team.mighty.logger.MightyLogger;
 import com.team.mighty.service.ConsumerInstrumentService;
@@ -42,28 +46,119 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	private MightyDeviceUserMapDAO mightyDeviceUserMapDAO;
 	
 
-	public boolean userLogin() {
-		// TODO Auto-generated method stub
-		return false;
+	public UserLoginDTO userLogin(UserLoginDTO userLoginDTO) {
+		if(userLoginDTO == null) {
+			throw new MightyAppException("Invalid Request, User Login Request is empty", HttpStatus.BAD_REQUEST);
+		}
+		
+		if(userLoginDTO.getUserId() <=0 || (userLoginDTO.getPhoneDeviceId().equals(null) || "".equals(userLoginDTO.getPhoneDeviceId()))) {
+			throw new MightyAppException("Invalid Request, User Id or Phone Device Id is empty", HttpStatus.BAD_REQUEST);
+		}
+		
+		MightyUserInfo mightyUserInfo = consumerInstrumentDAO.findOne(userLoginDTO.getUserId());
+		
+		if(null == mightyUserInfo) {
+			throw new MightyAppException(" User Id not found in system ", HttpStatus.NOT_FOUND);
+		}
+		
+		Set<MightyDeviceUserMapping> userMapping = mightyUserInfo.getMightyDeviceUserMapping();
+		
+		if(userMapping == null) {
+			throw new MightyAppException(" Phone device not found in system ", HttpStatus.NOT_FOUND);
+		}
+		
+		MightyDeviceUserMapping deviceMap = mightyDeviceUserMapDAO.checkUserAndPhoneDeviceId(mightyUserInfo.getId(), userLoginDTO.getPhoneDeviceId());
+		
+		if(deviceMap == null) {
+			throw new MightyAppException(" Phone device not found in system ", HttpStatus.NOT_FOUND);
+		}
+		
+		Iterator<MightyDeviceUserMapping> it = userMapping.iterator();
+		
+		List<String> lstMightyDevice = new ArrayList<String>();
+		
+		while(it.hasNext()) {
+			MightyDeviceUserMapping mightDeviceUser = it.next();
+			long mightyDeviceId = mightDeviceUser.getMightyDeviceId();
+			
+			MightyDeviceInfo mightyDeviceInfo = mightyDeviceInfoDAO.findOne(mightyDeviceId);
+			if(mightyDeviceInfo != null) {
+				lstMightyDevice.add(mightyDeviceInfo.getDeviceId());
+			}
+		}
+		
+		userLoginDTO.setUserStatus(mightyUserInfo.getUserStatus());
+		userLoginDTO.setLstMightyDeviceId(lstMightyDevice);
+		
+		userLoginDTO.setStatusCode(HttpStatus.OK.toString());
+		
+		return userLoginDTO;
 	}
 
 	@Transactional
 	private void registerUserAndDevice(ConsumerDeviceDTO consumerDeviceDto, MightyDeviceInfo mightyDeviceInfo) throws MightyAppException {
 		
 		MightyUserInfo mightyUserInfo = new MightyUserInfo();
-		mightyUserInfo.setUserName(consumerDeviceDto.getUserName());
-		mightyUserInfo.setUserStatus(MightyAppConstants.IND_A);
-		mightyUserInfo.setFirstName(consumerDeviceDto.getFirstName());
-		mightyUserInfo.setLastName(consumerDeviceDto.getLastName());
-		mightyUserInfo.setEmailId(consumerDeviceDto.getEmailId());
+		String phoneDeviceId = consumerDeviceDto.getDeviceId();
+		if(consumerDeviceDto.getUserId() > 0 ) {
+			mightyUserInfo = consumerInstrumentDAO.findOne(consumerDeviceDto.getUserId());
+			
+			if(mightyUserInfo != null) {
+				// Check any de-activated device registered
+				MightyDeviceUserMapping mightyDeviceUserMapping = mightyDeviceUserMapDAO.checkAnyDeActivatedAccount(consumerDeviceDto.getUserId(), mightyDeviceInfo.getId(), phoneDeviceId);
+				
+				if(mightyDeviceUserMapping != null && mightyDeviceUserMapping.getRegistrationStatus().equals(MightyAppConstants.IND_N)){
+					logger.info(" Already Disbaled account is there and activating that one ------- ");
+					mightyDeviceUserMapping.setRegistrationStatus(MightyAppConstants.IND_Y);
+					mightyDeviceInfo.setIsRegistered(MightyAppConstants.IND_Y);
+					mightyDeviceUserMapDAO.save(mightyDeviceUserMapping);
+					mightyDeviceInfoDAO.save(mightyDeviceInfo);
+					return ;
+				} else if(mightyDeviceUserMapping != null && mightyDeviceUserMapping.getRegistrationStatus().equals(MightyAppConstants.IND_Y)) {
+					throw new MightyAppException(" User Id, Device Id and Phone Device is already registered", HttpStatus.CONFLICT);
+				}
+			}
+		}
 		
-		MightyDeviceUserMapping mightyDeviceUserMapping = new MightyDeviceUserMapping();
+		// Check any de-activated device registered
+		MightyDeviceUserMapping mightyDeviceUserMapping = mightyDeviceUserMapDAO.checkAnyDeActivatedAccountByUserName(consumerDeviceDto.getUserName(), mightyDeviceInfo.getId(), phoneDeviceId);
+		
+		if(mightyDeviceUserMapping != null && mightyDeviceUserMapping.getRegistrationStatus().equals(MightyAppConstants.IND_N)){
+			logger.info(" Already Disbaled account is there and activating that one ------- ");
+			mightyDeviceUserMapping.setRegistrationStatus(MightyAppConstants.IND_Y);
+			mightyDeviceInfo.setIsRegistered(MightyAppConstants.IND_Y);
+			mightyDeviceUserMapDAO.save(mightyDeviceUserMapping);
+			mightyDeviceInfoDAO.save(mightyDeviceInfo);
+			return ;
+		} else if(mightyDeviceUserMapping != null && mightyDeviceUserMapping.getRegistrationStatus().equals(MightyAppConstants.IND_Y)) {
+			throw new MightyAppException(" User Id, Device Id and Phone Device is already registered", HttpStatus.CONFLICT);
+		}
+		
+		if(mightyUserInfo == null) {
+			logger.info(" User information not found in database, hence creating new one ");
+			mightyUserInfo = new MightyUserInfo();
+			
+			logger.info("----------------- "+consumerDeviceDto.getUserName());
+			mightyUserInfo.setUserName(consumerDeviceDto.getUserName());
+			mightyUserInfo.setUserStatus(MightyAppConstants.IND_A);
+			mightyUserInfo.setFirstName(consumerDeviceDto.getFirstName());
+			mightyUserInfo.setLastName(consumerDeviceDto.getLastName());
+			mightyUserInfo.setEmailId(consumerDeviceDto.getEmailId());
+			mightyUserInfo.setCreatedDt(new Date(System.currentTimeMillis()));
+			mightyUserInfo.setUpdatedDt(new Date(System.currentTimeMillis()));
+			
+		}
+		
+		mightyDeviceUserMapping = new MightyDeviceUserMapping();
 		mightyDeviceUserMapping.setMightyDeviceId(mightyDeviceInfo.getId());
 		mightyDeviceUserMapping.setMightyUserInfo(mightyUserInfo);
 		mightyDeviceUserMapping.setPhoneDeviceOSVersion(consumerDeviceDto.getDeviceOs());
 		mightyDeviceUserMapping.setPhoneDeviceType(consumerDeviceDto.getDeviceType());
 		mightyDeviceUserMapping.setPhoneDeviceId(consumerDeviceDto.getDeviceId());
 		mightyDeviceUserMapping.setPhoneDeviceVersion(consumerDeviceDto.getDeviceOsVersion());
+		mightyDeviceUserMapping.setRegistrationStatus(MightyAppConstants.IND_Y);
+		mightyDeviceUserMapping.setCreatedDt(new Date(System.currentTimeMillis()));
+		mightyDeviceUserMapping.setUpdatedDt(new Date(System.currentTimeMillis()));
 		
 		Set<MightyUserInfo> setUserInfo = new HashSet<MightyUserInfo>();
 		
@@ -74,15 +169,14 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 		setMightyUserDevice.add(mightyDeviceUserMapping);
 		mightyUserInfo.setMightyDeviceUserMapping(setMightyUserDevice);
 		
-		mightyUserInfo.setMightyDeviceInfo(mightyDeviceInfo);
-		
 		setUserInfo.add(mightyUserInfo);
 		
 		mightyDeviceInfo.setIsRegistered(MightyAppConstants.IND_Y);
-		mightyDeviceInfo.setMightyUserInfo(setUserInfo);
+		//mightyDeviceInfo.setMightyUserInfo(setUserInfo);
 		
 		try {
 			consumerInstrumentDAO.save(mightyUserInfo);
+			mightyDeviceInfoDAO.save(mightyDeviceInfo);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 			throw new MightyAppException("Unable to save User Device Mapping", HttpStatus.INTERNAL_SERVER_ERROR, e);
@@ -110,8 +204,6 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 		validateDevice(consumerDeviceDto.getMightyDeviceId());
 		
 		MightyDeviceInfo mightDeviceInfo = getDeviceDetails(consumerDeviceDto.getMightyDeviceId());
-		
-
 		
 		registerUserAndDevice(consumerDeviceDto, mightDeviceInfo);
 		
@@ -144,6 +236,10 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 		
 		if(mightDeviceInfo == null ) {
 			throw new MightyAppException("Device Details Not Found in System", HttpStatus.NOT_FOUND);
+		}
+		
+		if(mightDeviceInfo.getIsActive().equalsIgnoreCase(MightyAppConstants.IND_N)) {
+			throw new MightyAppException("Device is In Active, So cannot update", HttpStatus.PRECONDITION_FAILED);
 		}
 		
 		MightyDeviceUserMapping mightyDeviceUserMapping = mightyDeviceUserMapDAO.getDeviceInfo(mightDeviceInfo.getId());
