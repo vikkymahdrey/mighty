@@ -2,6 +2,7 @@ package com.team.mighty.service;
 
 import java.util.List;
 
+import com.team.mighty.domain.MightyDeviceFirmware;
 import com.team.mighty.domain.MightyDeviceInfo;
 import com.team.mighty.domain.MightyUserInfo;
 import com.team.mighty.dto.ConsumerDeviceDTO;
@@ -32,6 +33,7 @@ public interface ConsumerInstrumentService {
 	public List<MightyUserInfo> getMightyUserInfo() throws Exception;
 
 	public List<MightyDeviceInfo> getMightyDeviceInfo() throws Exception;
+
 	
 
 }

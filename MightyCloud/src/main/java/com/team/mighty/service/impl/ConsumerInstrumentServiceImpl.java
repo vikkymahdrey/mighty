@@ -15,8 +15,10 @@ import org.springframework.stereotype.Service;
 
 import com.team.mighty.constant.MightyAppConstants;
 import com.team.mighty.dao.ConsumerInstrumentDAO;
+import com.team.mighty.dao.MightyDeviceFirmwareDAO;
 import com.team.mighty.dao.MightyDeviceInfoDAO;
 import com.team.mighty.dao.MightyDeviceUserMapDAO;
+import com.team.mighty.domain.MightyDeviceFirmware;
 import com.team.mighty.domain.MightyDeviceInfo;
 import com.team.mighty.domain.MightyDeviceUserMapping;
 import com.team.mighty.domain.MightyUserInfo;
@@ -45,6 +47,7 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	@Autowired
 	private MightyDeviceUserMapDAO mightyDeviceUserMapDAO;
 	
+		
 
 	public UserLoginDTO userLogin(UserLoginDTO userLoginDTO) {
 		if(userLoginDTO == null) {
@@ -332,5 +335,7 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	public List<MightyDeviceInfo> getMightyDeviceInfo() throws Exception {
 		return mightyDeviceInfoDAO.getMightyDeviceInfo();
 	}
+
+		
 
 }

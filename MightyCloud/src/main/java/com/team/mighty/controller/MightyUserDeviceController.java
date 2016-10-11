@@ -36,4 +36,9 @@ private static final MightyLogger logger = MightyLogger.getLogger(MightyUserDevi
 		map.put("mightyDeviceList", mightyDeviceList);
 		return "mightyDeviceInfo";
 	}
+	
+	
+	
+
+	
 }
