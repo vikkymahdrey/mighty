@@ -64,11 +64,11 @@ public class MightyUserInfo extends BaseEntityInfo {
 	@Column(name = "UPDATED_DT")
 	private Date updatedDt;
 	
-	/*@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<MightyDeviceUserMapping> mightyDeviceUserMapping;*/
-	
-	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<MightyDeviceUserMapping> mightyDeviceUserMapping;
+	
+	
+	/*private Set<MightyDeviceUserMapping> mightyDeviceUserMapping;*/
 	
 	public long getId() {
 		return id;
