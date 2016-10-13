@@ -21,5 +21,7 @@ public interface AdminInstrumentService {
 	public List<MightyDeviceFirmware> getDeviceFirmware()throws Exception;
 
 	public List<MightyFeaturedPlaylist> getMightyFeaturedPlaylist()throws Exception;
+
+	public void insertMightyFeaturedPlaylistDetails(MightyFeaturedPlaylist mightyFeaturedPlaylist)throws Exception;
 	
 }

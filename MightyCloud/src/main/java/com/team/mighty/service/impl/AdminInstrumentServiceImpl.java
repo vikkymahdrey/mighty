@@ -115,4 +115,10 @@ public class AdminInstrumentServiceImpl implements AdminInstrumentService {
 		return mightyFeaturedPlaylistDAO.getMightyFeaturedPlaylist();
 	}
 
+	
+	public void insertMightyFeaturedPlaylistDetails(MightyFeaturedPlaylist mightyFeaturedPlaylist) throws Exception {
+		mightyFeaturedPlaylistDAO.save(mightyFeaturedPlaylist);
+		
+	}
+
 }

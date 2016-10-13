@@ -38,9 +38,9 @@
 				
 				<display:column  property="deviceType" title="Device_Type" sortable="true" headerClass="sortable"/>
 				
-				<display:column property="isRegistered" title="Registered_Status" 	sortable="true" headerClass="sortable" />
+				<display:column property="isRegistered" title="Is_Registered" 	sortable="true" headerClass="sortable" />
 				
-				<display:column  property="isActive" title="Device_Status" sortable="true" headerClass="sortable"/>
+				<display:column  property="isActive" title="Is_Active" sortable="true" headerClass="sortable"/>
 				
 			
      		   
