@@ -1,5 +1,7 @@
 package com.team.mighty.controller;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -52,11 +54,50 @@ public class ConsumerInstrumentController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> doRegistration(@RequestBody ConsumerDeviceDTO consumerDeviceDto) {
-		logger.info(" /POST Consumer API",  consumerDeviceDto);
+	public ResponseEntity<String> doRegistration(@RequestBody String received) {
+		logger.info(" /POST Consumer API");
+		
+		JSONObject obj=null;
 		ResponseEntity<String> responseEntity = null;
+		try{		
+				obj=new JSONObject();
+				obj=(JSONObject)new JSONParser().parse(received);
+		}catch(Exception e){
+			logger.error("Exception in",e);
+		}
+				
+				
 		try {
-			consumerInstrumentServiceImpl.registerDevice(consumerDeviceDto);
+			ConsumerDeviceDTO consumerDeviceDTO=new ConsumerDeviceDTO();
+			consumerDeviceDTO.setUserName(obj.get("UserName").toString());	
+			consumerDeviceDTO.setFirstName(obj.get("FirstName").toString());	
+			consumerDeviceDTO.setLastName(obj.get("LastName").toString());
+			consumerDeviceDTO.setEmailId(obj.get("EmailID").toString());
+			consumerDeviceDTO.setMightyDeviceId(obj.get("MightyDeviceID").toString());
+			consumerDeviceDTO.setDeviceModel(obj.get("DeviceModel").toString());
+			consumerDeviceDTO.setDeviceId(obj.get("DeviceID").toString());
+			consumerDeviceDTO.setDeviceName(obj.get("DeviceName").toString());
+			consumerDeviceDTO.setDeviceOs(obj.get("DeviceOS").toString());
+			consumerDeviceDTO.setDeviceOsVersion(obj.get("DeviceOSVersion").toString());
+			consumerDeviceDTO.setDeviceType(obj.get("DeviceType").toString());
+						
+			
+			logger.debug(obj.get("UserName").toString());
+			logger.debug(obj.get("FirstName").toString());
+			logger.debug(obj.get("LastName").toString());
+			logger.debug(obj.get("EmailID").toString());
+			
+			logger.debug(obj.get("MightyDeviceID").toString());
+			logger.debug(obj.get("DeviceModel").toString());
+			logger.debug(obj.get("DeviceID").toString());
+			logger.debug(obj.get("DeviceName").toString());
+			logger.debug(obj.get("DeviceOS").toString());
+			logger.debug(obj.get("DeviceOSVersion").toString());
+			logger.debug(obj.get("DeviceType").toString());
+			
+			
+			
+			consumerInstrumentServiceImpl.registerDevice(consumerDeviceDTO);
 			responseEntity = new ResponseEntity<String>(HttpStatus.OK);
 		} catch(MightyAppException e) {
 			String errorMessage = e.getMessage();

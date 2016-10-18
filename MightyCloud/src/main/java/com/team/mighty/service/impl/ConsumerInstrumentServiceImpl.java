@@ -102,6 +102,7 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	private void registerUserAndDevice(ConsumerDeviceDTO consumerDeviceDto, MightyDeviceInfo mightyDeviceInfo) throws MightyAppException {
 		
 		MightyUserInfo mightyUserInfo = new MightyUserInfo();
+		
 		String phoneDeviceId = consumerDeviceDto.getDeviceId();
 		if(consumerDeviceDto.getUserId() > 0 ) {
 			mightyUserInfo = consumerInstrumentDAO.findOne(consumerDeviceDto.getUserId());
